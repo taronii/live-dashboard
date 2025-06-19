@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ライブ管理ダッシュボード</title>
+  <!-- Bootstrap CSS -->
+  <!-- Bootswatch Lux Theme (Bootstrap) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/lux/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="management.css">
+</head>
+<body>
+  <nav class="navbar navbar-dark bg-primary mb-4">
+    <div class="container-fluid">
+      <span class="navbar-brand mb-0 h1">ライブ管理ダッシュボード</span>
+    </div>
+  </nav>
+    
+  
+  <main class="container-fluid py-3">
+    <!-- 配信IDセクション -->
+    <section class="card shadow-sm p-3 mb-4" id="broadcast-section">
+      <h2>配信ID設定</h2>
+      <div class="input-group">
+        <input type="text" id="broadcastId" placeholder="Broadcast ID を入力" />
+        <button id="setBroadcast" class="btn btn-primary">設定</button>
+      </div>
+    </section>
+
+    <!-- コメントコントロール -->
+    <section class="card shadow-sm p-3 mb-4" id="chat-section">
+      <h2>チャット一覧 / 表示中</h2>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <h3>受信チャット</h3>
+          <ul id="chatList" class="list-group small"></ul>
+        </div>
+        <div class="col-md-6">
+          <h3>表示中コメント</h3>
+          <ul id="activeChat" class="list-group small"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- アンケート設定 -->
+    <section class="card shadow-sm p-3 mb-4" id="survey-section">
+      <h2>アンケート設定 / 状況</h2>
+      <form id="surveyForm" class="survey-form">
+        <input type="text" id="question" placeholder="質問文" required>
+        <div class="options">
+          <input type="text" class="option" placeholder="選択肢1" required>
+          <input type="text" class="option" placeholder="選択肢2" required>
+          <button type="button" id="addOption" class="btn btn-secondary">選択肢追加</button>
+        </div>
+        <div class="input-group">
+          <select id="chartType">
+            <option value="bar">棒グラフ</option>
+            <option value="pie">円グラフ</option>
+          </select>
+          <button type="submit" class="btn btn-primary">作成</button>
+        </div>
+      </form>
+      <div class="survey-controls" id="surveyControls"></div>
+      <div class="survey-status" id="surveyStatus"></div>
+    </section>
+  </main>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="config.js"></script>
+  <script src="management.js"></script>
+</body>
+</html>

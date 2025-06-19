@@ -1,0 +1,109 @@
+:root {
+  --primary-color: #ffab73;
+  --secondary-color: #a6d8f0;
+  --bg-color: #fff;
+  --text-color: #5d4037;
+  --card-bg: #fff3e6;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+}
+.header {
+  background: var(--primary-color);
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+}
+.container-fluid {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.card {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+.input-group input[type="text"],
+.survey-form input[type="text"],
+.survey-form select {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+:root {
+  --bs-primary: #ffab73;
+  --bs-secondary: #a6d8f0;
+}
+
+/* Override Bootstrap primary button */
+.btn-primary {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-secondary {
+  background: var(--secondary-color);
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+.chat-columns {
+  display: flex;
+  gap: 1rem;
+}
+.chat-list, .chat-active {
+  flex: 1;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.chat-list ul, .chat-active ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.chat-list li, .chat-active li {
+  background: #fff;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+.survey-form .options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.survey-controls {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+.survey-status {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+@media (max-width: 600px) {
+  .chat-columns {
+    flex-direction: column;
+  }
+}
