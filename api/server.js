@@ -53,8 +53,10 @@ io.on('connection', socket => {
   console.log('Client connected:', socket.id);
 
   socket.on('set_broadcast_id', async ({ broadcastId }) => {
-    const info = await axios.get(`https://www.googleapis.com/youtube/v3/liveBroadcasts?part=snippet&id=${broadcastId}&key=${YOUTUBE_API_KEY}`);
-    liveChatId = info.data.items[0].snippet.liveChatId;
+    // YouTube Data API: use videos.list to get activeLiveChatId (API key allowed)
+    const info = await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=${broadcastId}&key=${YOUTUBE_API_KEY}`);
+    liveChatId = info.data.items[0]?.liveStreamingDetails?.activeLiveChatId;
+    console.log('liveChatId =>', liveChatId);
     setInterval(fetchLiveChat, pollingInterval);
   });
 
