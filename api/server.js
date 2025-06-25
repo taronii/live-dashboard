@@ -51,6 +51,10 @@ async function fetchLiveChat() {
 // Socket.IO ハンドラ
 io.on('connection', socket => {
   console.log('Client connected:', socket.id);
+  // 現在のチャットキャッシュを新規接続へ即時送信
+  if (chatCache.length) {
+    socket.emit('chat_messages', { comments: chatCache.slice(-50) });
+  }
 
   socket.on('set_broadcast_id', async ({ broadcastId }) => {
     try {
