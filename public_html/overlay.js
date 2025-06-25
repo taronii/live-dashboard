@@ -1,6 +1,6 @@
 const socketBaseUrl = typeof window.API_URL === 'string' ? window.API_URL : 'http://localhost:3000';
 const socket = io(socketBaseUrl);
-const commentArea = document.getElementById('comments');
+const commentsDiv = document.getElementById('comments');
 let displayedComments = [];
 const MAX_COMMENTS = 2; // 最大表示コメント数を2個に制限
 
@@ -25,7 +25,7 @@ socket.on('survey_results', data => {
 });
 
 function renderComments() {
-  const commentsDiv = document.getElementById('comments');
+  commentsDiv
   commentsDiv.innerHTML = displayedComments.map(comment => `
     <div class="comment-box">
       <img class="user-avatar" src="${comment.authorIcon}" alt="${comment.authorName}">
