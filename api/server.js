@@ -91,6 +91,10 @@ io.on('connection', socket => {
   socket.on('stop_survey', ({ surveyId }) => {
     if (surveys[surveyId]) surveys[surveyId].active = false;
   });
+
+  socket.on('hide_survey', () => {
+    io.emit('hide_survey');
+  });
 });
 
 // 投票集計ループ

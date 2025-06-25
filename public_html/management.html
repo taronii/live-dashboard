@@ -24,19 +24,16 @@
       </div>
     </section>
 
-    <!-- コメント管理 -->
-    <section class="panel-card" id="comment-panel">
-      <h2>💬 コメント管理</h2>
-      <div class="comment-sections">
-        <div class="chat-incoming">
-          <h3>新着コメント</h3>
-          <div id="chatList" class="comment-list"></div>
-        </div>
-        <div class="chat-active">
-          <h3>🔥 表示中コメント</h3>
-          <div id="activeChat" class="active-comment-list"></div>
-        </div>
-      </div>
+    <!-- 新着コメント（大きなパネル） -->
+    <section class="panel-card wide-panel" id="incoming-comment-panel">
+      <h2>💬 新着コメント</h2>
+      <div id="chatList" class="comment-list large"></div>
+    </section>
+
+    <!-- 表示中コメント -->
+    <section class="panel-card" id="active-comment-panel">
+      <h2>🔥 表示中コメント</h2>
+      <div id="activeChat" class="active-comment-list"></div>
     </section>
 
     <!-- アンケート管理 -->
@@ -55,6 +52,7 @@
             <option value="pie">🥧 円グラフ</option>
           </select>
           <button type="submit" class="btn-primary">アンケート作成</button>
+          <button type="button" id="hideSurvey" class="btn-secondary">アンケートを隠す</button>
         </div>
       </form>
       <div id="surveyControls" class="survey-controls"></div>

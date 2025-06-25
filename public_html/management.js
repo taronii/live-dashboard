@@ -27,7 +27,11 @@ socket.on('chat_messages', data => {
 
 function renderChatList() {
   chatList.innerHTML = '';
-  allComments.forEach(comment => {
+  
+  // 最新のコメントを上に表示（最大50件）
+  const recentComments = allComments.slice(-50).reverse();
+  
+  recentComments.forEach(comment => {
     const div = document.createElement('div');
     div.className = `comment-item${comment.isSuperChat ? ' superchat' : ''}`;
     div.innerHTML = `
@@ -81,6 +85,17 @@ const surveyForm = document.getElementById('surveyForm');
 const surveyControls = document.getElementById('surveyControls');
 const surveyStatus = document.getElementById('surveyStatus');
 const addOptionBtn = document.getElementById('addOption');
+const hideSurveyBtn = document.getElementById('hideSurvey');
+
+// アンケート非表示機能
+hideSurveyBtn.addEventListener('click', () => {
+  socket.emit('hide_survey');
+  surveyStatus.textContent = '📊 アンケートを非表示にしました';
+  hideSurveyBtn.disabled = true;
+  setTimeout(() => {
+    hideSurveyBtn.disabled = false;
+  }, 2000);
+});
 
 addOptionBtn.addEventListener('click', () => {
   const newInput = document.createElement('input');

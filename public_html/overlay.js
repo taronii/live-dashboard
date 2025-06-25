@@ -21,8 +21,33 @@ socket.on('hide_comment', data => {
 });
 
 socket.on('survey_results', data => {
-  document.getElementById('surveyQuestion').textContent = data.question || '';
-  updateChart(data.counts, data.chartType);
+  document.getElementById('surveyQuestion').textContent = data.question;
+  if (surveyChart) surveyChart.destroy();
+  const ctx = document.getElementById('surveyChart').getContext('2d');
+  surveyChart = new Chart(ctx, {
+    type: data.chartType,
+    data: {
+      labels: Object.keys(data.counts),
+      datasets: [{
+        data: Object.values(data.counts),
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } }
+    }
+  });
+  document.getElementById('surveyBox').style.display = 'block';
+});
+
+socket.on('hide_survey', () => {
+  document.getElementById('surveyBox').style.display = 'none';
+  if (surveyChart) {
+    surveyChart.destroy();
+    surveyChart = null;
+  }
 });
 
 function renderComments() {
