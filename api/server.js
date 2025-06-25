@@ -13,6 +13,8 @@ const io = new Server(server, { cors: { origin: '*' } });
 
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 let liveChatId = null;
+let currentBroadcastId = null;
+let statsTimer;
 let nextPageToken = null;
 let pollingInterval = 4000;
 
@@ -48,6 +50,21 @@ async function fetchLiveChat() {
   }
 }
 
+async function fetchStreamStats() {
+  if (!currentBroadcastId) return;
+  try {
+    const url = `https://www.googleapis.com/youtube/v3/videos?part=statistics,liveStreamingDetails&id=${currentBroadcastId}&key=${YOUTUBE_API_KEY}`;
+    const res = await axios.get(url);
+    const item = res.data.items[0];
+    if (!item) return;
+    const likes = parseInt(item.statistics.likeCount || 0, 10);
+    const viewers = parseInt(item.liveStreamingDetails.concurrentViewers || 0, 10);
+    io.emit('stream_stats', { likes, viewers });
+  } catch (err) {
+    console.error('Error fetching stream stats:', err.message);
+  }
+}
+
 // Socket.IO ハンドラ
 io.on('connection', socket => {
   console.log('Client connected:', socket.id);
@@ -61,6 +78,9 @@ io.on('connection', socket => {
       // YouTube Data API: use videos.list to get activeLiveChatId (API key allowed)
       const info = await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=${broadcastId}&key=${YOUTUBE_API_KEY}`);
       liveChatId = info.data.items[0]?.liveStreamingDetails?.activeLiveChatId;
+        currentBroadcastId = broadcastId;
+        if (statsTimer) clearInterval(statsTimer);
+        statsTimer = setInterval(fetchStreamStats, 15000);
       console.log('liveChatId =>', liveChatId);
       if (liveChatId) {
         setInterval(fetchLiveChat, pollingInterval);

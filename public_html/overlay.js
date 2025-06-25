@@ -1,5 +1,6 @@
 const socketBaseUrl = typeof window.API_URL === 'string' ? window.API_URL : 'http://localhost:3000';
 const socket = io(socketBaseUrl);
+let lastLikes = 0;
 const commentsDiv = document.getElementById('comments');
 let displayedComments = [];
 const MAX_COMMENTS = 2; // 最大表示コメント数を2個に制限

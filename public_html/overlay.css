@@ -32,9 +32,19 @@ body {
 }
 
 /* グラフを右上に固定 */
+#statsBox{
+  position:fixed;top:20px;right:30px;
+  display:flex;gap:12px;align-items:center;
+  background:rgba(0,0,0,.7);
+  padding:6px 14px;border-radius:14px;
+  font-family:'Nunito',sans-serif;font-size:1.1rem;color:#fff;z-index:120;
+}
+#likesIcon.like-pulse{animation:pulse .6s ease;}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
+
 #surveyBox {
   position: fixed;
-  top: 30px;
+  top: 110px;
   right: 30px;
   display: flex;
   flex-direction: column;
