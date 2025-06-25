@@ -53,11 +53,20 @@ io.on('connection', socket => {
   console.log('Client connected:', socket.id);
 
   socket.on('set_broadcast_id', async ({ broadcastId }) => {
-    // YouTube Data API: use videos.list to get activeLiveChatId (API key allowed)
-    const info = await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=${broadcastId}&key=${YOUTUBE_API_KEY}`);
-    liveChatId = info.data.items[0]?.liveStreamingDetails?.activeLiveChatId;
-    console.log('liveChatId =>', liveChatId);
-    setInterval(fetchLiveChat, pollingInterval);
+    try {
+      // YouTube Data API: use videos.list to get activeLiveChatId (API key allowed)
+      const info = await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=${broadcastId}&key=${YOUTUBE_API_KEY}`);
+      liveChatId = info.data.items[0]?.liveStreamingDetails?.activeLiveChatId;
+      console.log('liveChatId =>', liveChatId);
+      if (liveChatId) {
+        setInterval(fetchLiveChat, pollingInterval);
+      } else {
+        socket.emit('error_msg', { message: 'ライブチャットIDが取得できませんでした' });
+      }
+    } catch (err) {
+      console.error('Error fetching liveStreamingDetails:', err.message);
+      socket.emit('error_msg', { message: 'YouTube API エラー: ' + err.message });
+    }
   });
 
   socket.on('display_comment', ({ commentId }) => {
