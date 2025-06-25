@@ -15,7 +15,7 @@ socket.on('hide_comment', data => {
 });
 
 socket.on('survey_results', data => {
-  updateChart(data.counts);
+  updateChart(data.counts, data.chartType);
 });
 
 function renderComments() {
@@ -34,13 +34,13 @@ function renderComments() {
 }
 
 let surveyChart;
-function updateChart(counts) {
+function updateChart(counts, chartType) {
   const ctx = document.getElementById('surveyChart').getContext('2d');
   const labels = Object.keys(counts);
   const data = Object.values(counts);
   if (!surveyChart) {
     surveyChart = new Chart(ctx, {
-      type: 'bar',
+      type: chartType || 'bar',
       data: { labels, datasets: [{ data }] },
       options: { animation: { duration: 500 } }
     });
