@@ -17,6 +17,7 @@ let liveChatId = null;
 let currentBroadcastId = null;
 let statsTimer;
 let chatTimer;
+let clientCount = 0;
 let nextPageToken = null;
 let pollingInterval = 4000;
 
@@ -71,7 +72,9 @@ async function fetchStreamStats() {
 
 // Socket.IO ハンドラ
 io.on('connection', socket => {
-  console.log('Client connected:', socket.id);
+  clientCount++;
+  console.log('Client connected:', socket.id, 'Total:', clientCount);
+  
   // 現在のチャットキャッシュを新規接続へ即時送信
   if (chatCache.length) {
     socket.emit('chat_messages', { comments: chatCache.slice(-50) });
@@ -133,6 +136,20 @@ io.on('connection', socket => {
   socket.on('delete_survey', ({ surveyId }) => {
     if (surveys[surveyId]) delete surveys[surveyId];
     io.emit('hide_survey');
+  });
+
+  // クライアント切断時
+  socket.on('disconnect', () => {
+    clientCount--;
+    console.log('Client disconnected:', socket.id, 'Total:', clientCount);
+    if (clientCount === 0) {
+      if (chatTimer) { clearTimeout(chatTimer); chatTimer = null; }
+      if (statsTimer) { clearInterval(statsTimer); statsTimer = null; }
+      liveChatId = null;
+      currentBroadcastId = null;
+      nextPageToken = null;
+      console.log('All clients disconnected, stopping API polling');
+    }
   });
 });
 
