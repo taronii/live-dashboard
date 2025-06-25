@@ -42,7 +42,7 @@ async function fetchLiveChat() {
       chatCache.push(msg);
       if (chatCache.length > 100) chatCache.shift();
     });
-    io.emit('chat_messages', { comments: chatCache.slice(-20) });
+    io.emit('chat_messages', { comments: chatCache.slice(-50) });
   } catch (err) {
     console.error('Error fetching liveChat:', err.message);
   }

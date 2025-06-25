@@ -26,10 +26,17 @@ socket.on('chat_messages', data => {
 });
 
 function renderChatList() {
+  console.log('Rendering chat list, total comments:', allComments.length);
   chatList.innerHTML = '';
+  
+  if (allComments.length === 0) {
+    chatList.innerHTML = '<div style="padding: 2rem; text-align: center; color: #666;">コメントを待機中...</div>';
+    return;
+  }
   
   // 最新のコメントを上に表示（最大50件）
   const recentComments = allComments.slice(-50).reverse();
+  console.log('Displaying recent comments:', recentComments.length);
   
   recentComments.forEach(comment => {
     const div = document.createElement('div');
