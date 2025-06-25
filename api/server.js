@@ -15,6 +15,7 @@ const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 let liveChatId = null;
 let currentBroadcastId = null;
 let statsTimer;
+let chatTimer;
 let nextPageToken = null;
 let pollingInterval = 4000;
 
@@ -45,6 +46,8 @@ async function fetchLiveChat() {
       if (chatCache.length > 100) chatCache.shift();
     });
     io.emit('chat_messages', { comments: chatCache.slice(-50) });
+    const interval = res.data.pollingIntervalMillis || 6000;
+    chatTimer = setTimeout(fetchLiveChat, interval);
   } catch (err) {
     console.error('Error fetching liveChat:', err.message);
   }
@@ -83,7 +86,9 @@ io.on('connection', socket => {
         statsTimer = setInterval(fetchStreamStats, 15000);
       console.log('liveChatId =>', liveChatId);
       if (liveChatId) {
-        setInterval(fetchLiveChat, pollingInterval);
+        if (chatTimer) clearTimeout(chatTimer);
+        nextPageToken = null;
+        fetchLiveChat();
       } else {
         socket.emit('error_msg', { message: 'ライブチャットIDが取得できませんでした' });
       }
