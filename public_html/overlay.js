@@ -21,6 +21,7 @@ socket.on('hide_comment', data => {
 });
 
 socket.on('survey_results', data => {
+  document.getElementById('surveyQuestion').textContent = data.question || '';
   updateChart(data.counts, data.chartType);
 });
 

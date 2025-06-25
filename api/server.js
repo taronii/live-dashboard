@@ -106,7 +106,7 @@ setInterval(() => {
     const counts = {};
     survey.options.forEach(opt => counts[opt] = 0);
     Object.values(voteMap).forEach(opt => counts[opt]++);
-    io.emit('survey_results', { counts, chartType: survey.chartType });
+    io.emit('survey_results', { question: survey.question, counts, chartType: survey.chartType });
   });
 }, pollingInterval);
 
