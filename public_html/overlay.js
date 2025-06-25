@@ -23,33 +23,41 @@ socket.on('hide_comment', data => {
 let surveyVisible = false;
 
 socket.on('survey_results', data => {
-  if (!surveyVisible) return;
   if (!data || !data.counts) return;
+  
+  // アンケートが表示可能な状態でのみ表示
+  if (surveyVisible) {
+    document.getElementById('surveyQuestion').textContent = data.question;
+    if (surveyChart) surveyChart.destroy();
+    const ctx = document.getElementById('surveyChart').getContext('2d');
+    surveyChart = new Chart(ctx, {
+      type: data.chartType,
+      data: {
+        labels: Object.keys(data.counts),
+        datasets: [{
+          data: Object.values(data.counts),
+          backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } }
+      }
+    });
+    document.getElementById('surveyBox').style.display = 'block';
+  }
+});
+
+// アンケート開始イベントを追加
+socket.on('survey_started', data => {
   surveyVisible = true;
-  document.getElementById('surveyQuestion').textContent = data.question;
-  if (surveyChart) surveyChart.destroy();
-  const ctx = document.getElementById('surveyChart').getContext('2d');
-  surveyChart = new Chart(ctx, {
-    type: data.chartType,
-    data: {
-      labels: Object.keys(data.counts),
-      datasets: [{
-        data: Object.values(data.counts),
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } }
-    }
-  });
-  if (surveyVisible) document.getElementById('surveyBox').style.display = 'block';
 });
 
 socket.on('hide_survey', () => {
   surveyVisible = false;
   document.getElementById('surveyBox').style.display = 'none';
+  document.getElementById('surveyQuestion').textContent = '';
   if (surveyChart) {
     surveyChart.destroy();
     surveyChart = null;
@@ -177,3 +185,5 @@ function updateChart(counts, chartType) {
     surveyChart.update();
   }
 }
+
+document.getElementById('surveyBox').style.display = 'none';

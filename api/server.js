@@ -89,7 +89,10 @@ io.on('connection', socket => {
   });
 
   socket.on('start_survey', ({ surveyId }) => {
-    if (surveys[surveyId]) surveys[surveyId].active = true;
+    if (surveys[surveyId]) {
+      surveys[surveyId].active = true;
+      io.emit('survey_started', { surveyId });
+    }
   });
 
   socket.on('stop_survey', ({ surveyId }) => {
