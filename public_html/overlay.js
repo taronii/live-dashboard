@@ -1,6 +1,6 @@
 const socketBaseUrl = typeof window.API_URL === 'string' ? window.API_URL : 'http://localhost:3000';
 const socket = io(socketBaseUrl);
-const commentArea = document.querySelector('.comment-area');
+const commentArea = document.getElementById('comments');
 let displayedComments = [];
 const MAX_COMMENTS = 2; // 最大表示コメント数を2個に制限
 
@@ -25,18 +25,16 @@ socket.on('survey_results', data => {
 });
 
 function renderComments() {
-  commentArea.innerHTML = '';
-  displayedComments.forEach(c => {
-    const div = document.createElement('div');
-    div.classList.add('comment-box');
-    div.innerHTML = `
-      <img src="${c.authorIcon}" class="avatar"/>
-      <span class="username">${c.authorName}</span>
-      <span class="text">${c.text}</span>
-      ${c.isSuperChat ? `<span class="superchat-amount">${c.amount}</span>` : ''}
-    `;
-    commentArea.appendChild(div);
-  });
+  const commentsDiv = document.getElementById('comments');
+  commentsDiv.innerHTML = displayedComments.map(comment => `
+    <div class="comment-box">
+      <img class="user-avatar" src="${comment.authorIcon}" alt="${comment.authorName}">
+      <div class="comment-content">
+        <div class="user-name">${comment.authorName}</div>
+        <div class="comment-text">${comment.text}</div>
+      </div>
+    </div>
+  `).join('');
 }
 
 let surveyChart;
@@ -81,6 +79,8 @@ function updateChart(counts, chartType) {
       },
       options: { 
         animation: { duration: 500 },
+        responsive: false,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
             display: true,
@@ -88,7 +88,9 @@ function updateChart(counts, chartType) {
             labels: {
               font: fontOptions,
               color: '#ffffff',
-              padding: 16
+              padding: 12,
+              boxWidth: 15,
+              boxHeight: 15
             }
           },
           tooltip: {
@@ -109,7 +111,7 @@ function updateChart(counts, chartType) {
               color: '#ffffff',
               font: {
                 family: fontOptions.family,
-                size: 14
+                size: 12
               }
             }
           },
@@ -122,7 +124,7 @@ function updateChart(counts, chartType) {
               color: '#ffffff',
               font: {
                 family: fontOptions.family,
-                size: 14
+                size: 12
               }
             }
           }
