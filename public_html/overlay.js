@@ -26,9 +26,9 @@ socket.on('survey_results', data => {
 });
 
 function renderComments() {
-  commentsDiv
   commentsDiv.innerHTML = displayedComments.map(comment => `
-    <div class="comment-box">
+    <div class="comment-box${comment.isSuperChat ? ' superchat' : ''}">
+      ${comment.isSuperChat && comment.amount ? `<div class="superchat-amount">${comment.amount}</div>` : ''}
       <img class="user-avatar" src="${comment.authorIcon}" alt="${comment.authorName}">
       <div class="comment-content">
         <div class="user-name">${comment.authorName}</div>

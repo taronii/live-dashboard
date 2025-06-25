@@ -70,9 +70,46 @@ canvas#surveyChart {
   display: flex;
   align-items: flex-start;
   width: 100%;
-  max-width: 1000px;
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
   border: 2px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+/* SuperChat豪華デザイン */
+.comment-box.superchat {
+  background: linear-gradient(135deg, #FFD700, #FF6B35, #F7931E);
+  border: 3px solid #FFD700;
+  box-shadow: 0 8px 35px rgba(255, 215, 0, 0.7), 0 0 25px rgba(255, 107, 53, 0.5);
+  animation: superChatGlow 2s infinite alternate;
+}
+
+@keyframes superChatGlow {
+  from { box-shadow: 0 8px 35px rgba(255, 215, 0, 0.7), 0 0 25px rgba(255, 107, 53, 0.5); }
+  to { box-shadow: 0 12px 45px rgba(255, 215, 0, 0.9), 0 0 35px rgba(255, 107, 53, 0.8); }
+}
+
+.comment-box.superchat .user-name {
+  color: #1a1a1a;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+}
+
+.comment-box.superchat .comment-text {
+  color: #1a1a1a;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+  font-weight: 700;
+}
+
+.comment-box.superchat .superchat-amount {
+  position: absolute;
+  top: -8px;
+  right: 15px;
+  background: #FF1744;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  box-shadow: 0 3px 10px rgba(255, 23, 68, 0.6);
 }
 
 .user-avatar {
