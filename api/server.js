@@ -14,7 +14,7 @@ const io = new Server(server, { cors: { origin: '*' } });
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 let liveChatId = null;
 let nextPageToken = null;
-let pollingInterval = 2000;
+let pollingInterval = 4000;
 
 // キャッシュ: 最新コメント
 let chatCache = [];
