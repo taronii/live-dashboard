@@ -54,6 +54,7 @@ function renderChatList() {
 
 // 表示中コメント管理
 let displayedComments = [];
+let currentSurveyId = null;
 function displayComment(commentId) {
   const comment = allComments.find(c => c.id === commentId);
   if (!comment) return;
@@ -96,6 +97,7 @@ const hideSurveyBtn = document.getElementById('hideSurvey');
 
 // アンケート非表示機能
 hideSurveyBtn.addEventListener('click', () => {
+  currentSurveyId = null;
   socket.emit('hide_survey');
   surveyStatus.textContent = '📊 アンケートを非表示にしました';
   hideSurveyBtn.disabled = true;
@@ -128,6 +130,7 @@ surveyForm.addEventListener('submit', e => {
 });
 
 socket.on('survey_created', data => {
+  currentSurveyId = data.surveyId;
   surveyControls.innerHTML = '';
   const btnStart = document.createElement('button');
   btnStart.textContent = '🚀 アンケート開始';
@@ -149,7 +152,19 @@ socket.on('survey_created', data => {
     btnStart.textContent = '🚀 アンケート開始';
   };
   
-  surveyControls.append(btnStart, btnStop);
+  const btnDelete = document.createElement('button');
+  btnDelete.textContent = '🗑️ 削除';
+  btnDelete.className = 'btn-danger';
+  btnDelete.onclick = () => {
+    if (confirm('本当にこのアンケートを削除しますか？')) {
+      socket.emit('delete_survey', { surveyId: data.surveyId });
+      surveyControls.innerHTML = '';
+      surveyStatus.textContent = '🗑️ アンケート削除';
+      currentSurveyId = null;
+    }
+  };
+  
+  surveyControls.append(btnStart, btnStop, btnDelete);
   surveyStatus.textContent = '✅ アンケート作成完了: ' + data.question;
 });
 

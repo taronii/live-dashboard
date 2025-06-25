@@ -23,6 +23,7 @@ socket.on('hide_comment', data => {
 let surveyVisible = false;
 
 socket.on('survey_results', data => {
+  if (!surveyVisible) return;
   if (!data || !data.counts) return;
   surveyVisible = true;
   document.getElementById('surveyQuestion').textContent = data.question;
