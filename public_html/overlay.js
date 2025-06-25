@@ -20,7 +20,11 @@ socket.on('hide_comment', data => {
   renderComments();
 });
 
+let surveyVisible = false;
+
 socket.on('survey_results', data => {
+  if (!data || !data.counts) return;
+  surveyVisible = true;
   document.getElementById('surveyQuestion').textContent = data.question;
   if (surveyChart) surveyChart.destroy();
   const ctx = document.getElementById('surveyChart').getContext('2d');
@@ -39,10 +43,11 @@ socket.on('survey_results', data => {
       plugins: { legend: { display: false } }
     }
   });
-  document.getElementById('surveyBox').style.display = 'block';
+  if (surveyVisible) document.getElementById('surveyBox').style.display = 'block';
 });
 
 socket.on('hide_survey', () => {
+  surveyVisible = false;
   document.getElementById('surveyBox').style.display = 'none';
   if (surveyChart) {
     surveyChart.destroy();

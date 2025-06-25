@@ -97,6 +97,8 @@ io.on('connection', socket => {
   });
 
   socket.on('hide_survey', () => {
+    // すべてのアンケートを非アクティブ化
+    Object.values(surveys).forEach(s => (s.active = false));
     io.emit('hide_survey');
   });
 });
