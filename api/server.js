@@ -6,10 +6,11 @@ const axios = require('axios');
 const cors = require('cors');
 require('dotenv').config();
 
+const FRONT_ORIGIN = process.env.FRONT_ORIGIN || 'https://live-dashboard-front.onrender.com';
 const app = express();
-app.use(cors());
+app.use(cors({ origin: FRONT_ORIGIN }));
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: '*' } });
+const io = new Server(server, { cors: { origin: FRONT_ORIGIN, methods: ['GET','POST'], credentials: true } });
 
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 let liveChatId = null;
