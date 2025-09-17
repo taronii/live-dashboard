@@ -4,6 +4,24 @@ let lastLikes = 0;
 const commentsDiv = document.getElementById('comments');
 let displayedComments = [];
 const MAX_COMMENTS = 2; // 最大表示コメント数を2個に制限
+const likesCountEl = document.getElementById('likesCount');
+const viewersCountEl = document.getElementById('viewersCount');
+const likesIcon = document.getElementById('likesIcon');
+
+socket.on('stream_stats', ({ likes, viewers }) => {
+  if (typeof likes === 'number') {
+    if (likes > lastLikes && likesIcon) {
+      likesIcon.classList.add('like-pulse');
+      setTimeout(() => likesIcon.classList.remove('like-pulse'), 600);
+    }
+    if (likesCountEl) likesCountEl.textContent = likes.toLocaleString();
+    lastLikes = likes;
+  }
+
+  if (typeof viewers === 'number' && viewersCountEl) {
+    viewersCountEl.textContent = viewers.toLocaleString();
+  }
+});
 
 socket.on('display_comment', data => {
   displayedComments.push(data);
